@@ -7,9 +7,9 @@ dropdb:
 	docker exec -it postgres13.3 dropdb gobank
 
 migrateup:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/gobank?sslmode=disable" -verbose up
+	docker run --rm -it -v $(PWD)/db/migration:/migrations --network host migrate/migrate -path=/migrations/ -database postgresql://root:secret@localhost:5432/gobank?sslmode=disable -verbose up
 migratedown:
-	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/gobank?sslmode=disable" -verbose down
+	docker run --rm -it -v $(PWD)/db/migration:/migrations --network host migrate/migrate -path=/migrations/ -database postgresql://root:secret@localhost:5432/gobank?sslmode=disable -verbose down
 sqlc:
 	docker run --rm -v $(pwd):/src -w /src sqlc/sqlc generate
 .PHONY:postgres createdb dropdb migrateup migratedown sqlc
