@@ -10,4 +10,6 @@ migrateup:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/gobank?sslmode=disable" -verbose up
 migratedown:
 	migrate -path db/migration -database "postgresql://root:secret@localhost:5432/gobank?sslmode=disable" -verbose down
-.PHONY:postgres createdb dropdb migrateup migratedown
+sqlc:
+	docker run --rm -v $(pwd):/src -w /src sqlc/sqlc generate
+.PHONY:postgres createdb dropdb migrateup migratedown sqlc
